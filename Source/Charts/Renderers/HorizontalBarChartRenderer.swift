@@ -231,7 +231,11 @@ open class HorizontalBarChartRenderer: BarChartRenderer
                 _barShadowRectBuffer.size.width = viewPortHandler.contentWidth
                 
                 context.setFillColor(dataSet.barShadowColor.cgColor)
-                context.fill(_barShadowRectBuffer)
+                // グラフのバーを角丸にするために追加
+                let bezierPath = UIBezierPath(roundedRect: _barShadowRectBuffer, cornerRadius: _barShadowRectBuffer.height / 2)
+                context.addPath(bezierPath.cgPath)
+                
+                context.drawPath(using: .fill)
             }
         }
         
@@ -268,7 +272,11 @@ open class HorizontalBarChartRenderer: BarChartRenderer
                 context.setFillColor(dataSet.color(atIndex: j).cgColor)
             }
 
-            context.fill(barRect)
+            // グラフのバーを角丸にするために追加
+            let bezierPath = UIBezierPath(roundedRect: barRect, cornerRadius: barRect.height / 2)
+            context.addPath(bezierPath.cgPath)
+            
+            context.drawPath(using: .fill)
 
             if drawBorder
             {
