@@ -272,8 +272,17 @@ open class HorizontalBarChartRenderer: BarChartRenderer
                 context.setFillColor(dataSet.color(atIndex: j).cgColor)
             }
 
+            // FIXME: barRect.widthの算出される値がおかしい場合があり、暫定的に算出している
+            let appropriateBarRect: CGRect = {
+                if barRect.width <= viewPortHandler.contentWidth {
+                    return barRect
+                } else {
+                    return CGRect(x: barRect.origin.x, y: barRect.origin.y, width: viewPortHandler.contentWidth, height: barRect.height)
+                }
+            }()
+            
             // グラフのバーを角丸にするために追加
-            let bezierPath = UIBezierPath(roundedRect: barRect, cornerRadius: barRect.height / 2)
+            let bezierPath = UIBezierPath(roundedRect: appropriateBarRect, cornerRadius: appropriateBarRect.height / 2)
             context.addPath(bezierPath.cgPath)
             
             context.drawPath(using: .fill)
